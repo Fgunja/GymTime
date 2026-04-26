@@ -1,0 +1,39 @@
+const routes = [
+  // PUBLIC
+  {
+    path: "/",
+    component: () => import("layouts/PublicLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/IndexPage.vue") },
+      { path: "login", component: () => import("pages/LoginPage.vue") },
+      { path: "register", component: () => import("pages/RegisterPage.vue") },
+      { path: "cjenik", component: () => import("pages/CjenikPage.vue") },
+    ],
+  },
+
+  // APP (SVE LOGIRANO IDE OVDJE)
+  {
+    path: "/app",
+    component: () => import("layouts/UserLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/IndexPage.vue") },
+      { path: "termini", component: () => import("pages/TerminiPage.vue") },
+      {
+        path: "rezervacije",
+        component: () => import("pages/RezervacijePage.vue"),
+      },
+      {
+        path: "obavijesti",
+        component: () => import("pages/ObavijestiPage.vue"),
+      },
+    ],
+  },
+
+  // fallback
+  {
+    path: "/:catchAll(.*)*",
+    redirect: "/",
+  },
+];
+
+export default routes;

@@ -16,6 +16,7 @@ const db = mysql.createConnection({
   user: "fgunja",
   password: "11",
   database: "fgunja",
+  dateStrings: true,
 });
 
 db.connect((err) => {
@@ -108,6 +109,73 @@ app.get("/cjenik", (req, res) => {
     }
 
     res.json(results);
+  });
+});
+
+// Dohvati sve termine
+app.get("/termini", (req, res) => {
+  db.query("SELECT * FROM terminGT ORDER BY datum, vrijeme", (err, results) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json(results);
+  });
+});
+
+// Dohvati rezervacije korisnika
+app.get("/rezervacije/:korisnik_id", (req, res) => {
+  const sql = `
+    SELECT r.*, t.datum, t.vrijeme, t.vrsta_treninga, t.trajanje
+    FROM rezervacijaGT r
+    JOIN terminGT t ON r.termin_id = t.termin_id
+    WHERE r.korisnik_id = ?
+  `;
+  db.query(sql, [req.params.korisnik_id], (err, results) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json(results);
+  });
+});
+
+// Kreiraj rezervaciju
+app.post("/rezervacije", (req, res) => {
+  const { korisnik_id, termin_id } = req.body;
+
+  // 1. Provjeri aktivnu pretplatu
+  const sqlPretplata = `
+    SELECT * FROM pretplataGT 
+    WHERE korisnik_id = ? AND status_pretplate = 'aktivna' AND datum_isteka >= CURDATE()
+  `;
+  db.query(sqlPretplata, [korisnik_id], (err, pretplate) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    if (pretplate.length === 0) return res.status(403).json({ message: "Nemate aktivnu pretplatu" });
+
+    // 2. Provjeri kapacitet
+    const sqlBroj = `SELECT COUNT(*) as broj FROM rezervacijaGT WHERE termin_id = ?`;
+    db.query(sqlBroj, [termin_id], (err, count) => {
+      if (err) return res.status(500).json({ message: "Greška" });
+
+      const sqlMax = `SELECT max_kapacitet FROM terminGT WHERE termin_id = ?`;
+      db.query(sqlMax, [termin_id], (err, termin) => {
+        if (err || termin.length === 0) return res.status(500).json({ message: "Greška" });
+        if (count[0].broj >= termin[0].max_kapacitet) return res.status(400).json({ message: "Termin je popunjen" });
+
+        // 3. Kreiraj rezervaciju
+        const sql = `
+          INSERT INTO rezervacijaGT (korisnik_id, termin_id, datum_rezervacije, status_rezervacije)
+          VALUES (?, ?, CURDATE(), 'potvrđena')
+        `;
+        db.query(sql, [korisnik_id, termin_id], (err) => {
+          if (err) return res.status(500).json({ message: "Greška" });
+          res.json({ message: "Rezervacija kreirana" });
+        });
+      });
+    });
+  });
+});
+
+// Otkaži rezervaciju
+app.delete("/rezervacije/:rezervacija_id", (req, res) => {
+  db.query("DELETE FROM rezervacijaGT WHERE rezervacija_id = ?", [req.params.rezervacija_id], (err) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json({ message: "Rezervacija otkazana" });
   });
 });
 

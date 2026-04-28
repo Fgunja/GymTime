@@ -171,6 +171,25 @@ app.post("/rezervacije", (req, res) => {
   });
 });
 
+// Dodavanje novih termina (za admina)
+app.post("/termini", (req, res) => {
+  const { datum, vrijeme, korisnik_id, trajanje, vrsta_treninga, opis, max_kapacitet } = req.body;
+  const sql = `INSERT INTO terminGT (datum, vrijeme, korisnik_id, trajanje, vrsta_treninga, opis, max_kapacitet) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  db.query(sql, [datum, vrijeme, korisnik_id, trajanje, vrsta_treninga, opis, max_kapacitet], (err) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json({ message: "Termin kreiran" });
+  });
+});
+
+// Dohvat detalja termina
+app.get("/termini/:termin_id", (req, res) => {
+  db.query("SELECT * FROM terminGT WHERE termin_id = ?", [req.params.termin_id], (err, results) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    if (results.length === 0) return res.status(404).json({ message: "Termin ne postoji" });
+    res.json(results[0]);
+  });
+});
+
 // Otkaži rezervaciju
 app.delete("/rezervacije/:rezervacija_id", (req, res) => {
   db.query("DELETE FROM rezervacijaGT WHERE rezervacija_id = ?", [req.params.rezervacija_id], (err) => {

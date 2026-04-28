@@ -26,6 +26,10 @@ const routes = [
         path: "obavijesti",
         component: () => import("pages/ObavijestiPage.vue"),
       },
+      {
+  path: "termini/:termin_id",
+  component: () => import("pages/TerminDetaljiPage.vue"),
+},
     ],
   },
 

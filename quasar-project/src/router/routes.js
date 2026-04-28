@@ -19,6 +19,10 @@ const routes = [
       { path: "", component: () => import("pages/IndexPage.vue") },
       { path: "termini", component: () => import("pages/TerminiPage.vue") },
       {
+        path: "termini/:termin_id",
+        component: () => import("pages/TerminDetaljiPage.vue"),
+      },
+      {
         path: "rezervacije",
         component: () => import("pages/RezervacijePage.vue"),
       },
@@ -26,10 +30,11 @@ const routes = [
         path: "obavijesti",
         component: () => import("pages/ObavijestiPage.vue"),
       },
+      { path: "cjenik", component: () => import("pages/CjenikPage.vue") },
       {
-  path: "termini/:termin_id",
-  component: () => import("pages/TerminDetaljiPage.vue"),
-},
+        path: "korisnici",
+        component: () => import("pages/PregledKorisnikaPage.vue"),
+      }, // ← DODANO
     ],
   },
 

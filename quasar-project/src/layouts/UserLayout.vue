@@ -1,59 +1,68 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <!-- HEADER -->
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <!-- TITLE -->
         <q-toolbar-title
           class="cursor-pointer text-weight-bold"
-          @click="goHome"
+          @click="$router.push('/app')"
         >
           GymTime
         </q-toolbar-title>
 
-        <!-- GUEST -->
-        <div v-if="!auth.state.user" class="row q-gutter-sm">
-          <q-btn flat label="Prijava" to="/login" />
-          <q-btn flat label="Registracija" to="/register" />
-          <q-btn flat label="Cjenik" to="/cjenik" />
-        </div>
-
-        <!-- LOGGED USER -->
-        <div v-else class="row items-center q-gutter-sm">
-          👤 {{ auth.state.user.username }}
-
+        <div class="row items-center q-gutter-sm">
+          👤 {{ auth.state.user?.username }}
           <q-btn flat icon="logout" @click="logout" />
         </div>
       </q-toolbar>
     </q-header>
 
-    <!-- DRAWER -->
-    <q-drawer v-if="auth.state.user" show-if-above bordered>
+    <q-drawer show-if-above bordered>
       <q-list>
-        <q-item to="/app" clickable>
-          <q-item-section>Home</q-item-section>
+        <!-- KORISNIČKE STRANICE -->
+        <q-item-label header class="text-grey-7">Izbornik</q-item-label>
+
+        <q-item to="/app" exact clickable v-ripple>
+          <q-item-section avatar><q-icon name="home" /></q-item-section>
+          <q-item-section>Početna</q-item-section>
         </q-item>
 
-        <q-item to="/app/termini" clickable>
+        <q-item to="/app/termini" clickable v-ripple>
+          <q-item-section avatar
+            ><q-icon name="fitness_center"
+          /></q-item-section>
           <q-item-section>Termini</q-item-section>
         </q-item>
 
-        <q-item to="/app/rezervacije" clickable>
+        <q-item to="/app/rezervacije" clickable v-ripple>
+          <q-item-section avatar><q-icon name="event" /></q-item-section>
           <q-item-section>Rezervacije</q-item-section>
         </q-item>
 
-        <q-item to="/app/obavijesti" clickable>
+        <q-item to="/app/obavijesti" clickable v-ripple>
+          <q-item-section avatar
+            ><q-icon name="notifications"
+          /></q-item-section>
           <q-item-section>Obavijesti</q-item-section>
         </q-item>
 
-        <!-- 🔥 CJENIK DODAN U APP DIO -->
-        <q-item to="/cjenik" clickable>
+        <q-item to="/app/cjenik" clickable v-ripple>
+          <q-item-section avatar><q-icon name="sell" /></q-item-section>
           <q-item-section>Cjenik</q-item-section>
         </q-item>
+
+        <!-- ADMIN SEKCIJA - samo za admina -->
+        <template v-if="auth.state.user?.uloga === 'admin'">
+          <q-separator class="q-my-sm" />
+          <q-item-label header class="text-grey-7">Admin</q-item-label>
+
+          <q-item to="/app/korisnici" clickable v-ripple>
+            <q-item-section avatar><q-icon name="people" /></q-item-section>
+            <q-item-section>Pregled korisnika</q-item-section>
+          </q-item>
+        </template>
       </q-list>
     </q-drawer>
 
-    <!-- CONTENT -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -69,29 +78,12 @@ export default {
     const auth = useAuth();
     const router = useRouter();
 
-    const goHome = () => {
-      const user = auth.state.user;
-
-      // guest
-      if (!user) {
-        router.push("/");
-        return;
-      }
-
-      // logged (user + trainer + admin)
-      router.push("/app");
-    };
-
     const logout = () => {
       auth.logout();
       router.push("/");
     };
 
-    return {
-      auth,
-      goHome,
-      logout,
-    };
+    return { auth, logout };
   },
 };
 </script>

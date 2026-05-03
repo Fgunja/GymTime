@@ -50,6 +50,11 @@
           <q-item-section>Cjenik</q-item-section>
         </q-item>
 
+        <q-item to="/app/profil" clickable v-ripple>
+          <q-item-section avatar><q-icon name="account_circle" /></q-item-section>
+          <q-item-section>Profil</q-item-section>
+        </q-item>
+
         <!-- ADMIN SEKCIJA - samo za admina -->
         <template v-if="auth.state.user?.uloga === 'admin'">
           <q-separator class="q-my-sm" />

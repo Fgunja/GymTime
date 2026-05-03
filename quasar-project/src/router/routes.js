@@ -27,6 +27,14 @@ const routes = [
         component: () => import("pages/RezervacijePage.vue"),
       },
       {
+        path: "rezervacije/:rezervacija_id",
+        component: () => import("pages/RezervacijaDetaljiPage.vue"),
+      },
+      {
+        path: "profil",
+        component: () => import("pages/ProfilPage.vue"),
+      },
+      {
         path: "obavijesti",
         component: () => import("pages/ObavijestiPage.vue"),
       },
@@ -34,7 +42,7 @@ const routes = [
       {
         path: "korisnici",
         component: () => import("pages/PregledKorisnikaPage.vue"),
-      }, // ← DODANO
+      }, 
     ],
   },
 

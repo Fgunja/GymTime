@@ -11,14 +11,16 @@ router.beforeEach((to) => {
   const auth = useAuth();
   const user = auth.state.user;
 
-  // 🔥 JAVNE STRANICE (SVATKO MOŽE VIDJETI)
   const publicPages = ["/", "/login", "/register", "/cjenik"];
-
   const isPublic = publicPages.includes(to.path);
 
-  // 🔥 ako nije login i nije public → blok
   if (!user && !isPublic) {
     return "/";
+  }
+
+  // Ako je korisnik prijavljen i ide na "/" → preusmjeri na /app
+  if (user && to.path === "/") {
+    return "/app";
   }
 
   return true;

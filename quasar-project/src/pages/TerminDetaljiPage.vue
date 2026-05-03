@@ -23,6 +23,10 @@
               <div class="text-caption text-grey">Max kapacitet</div>
               <div class="text-body1">{{ termin.max_kapacitet }} osoba</div>
             </div>
+            <div class="col-2">
+      <div class="text-h6 text-primary">{{ popunjenost }}/{{ termin.max_kapacitet }}</div>
+      <div class="text-caption text-grey">Zauzeto</div>
+    </div>
           </div>
         </q-card-section>
 
@@ -56,8 +60,11 @@ export default {
     return { $q };
   },
   data() {
-    return { termin: null };
-  },
+  return { 
+    termin: null,
+    popunjenost: 0,
+  };
+},
   computed: {
     isAdmin() {
       const auth = useAuth();
@@ -67,12 +74,14 @@ export default {
   async mounted() {
     const id = this.$route.params.termin_id;
     try {
-      const res = await axios.get(`http://localhost:3000/termini/${id}`);
-      this.termin = res.data;
-    } catch (err) {
-      console.log("Greška pri dohvaćanju termina", err);
-    }
-  },
+    const res = await axios.get(`http://localhost:3000/termini/${id}`);
+    this.termin = res.data;
+    const pop = await axios.get(`http://localhost:3000/termini/${id}/popunjenost`);
+    this.popunjenost = pop.data.broj;
+  } catch (err) {
+    console.log("Greška pri dohvaćanju termina", err);
+  }
+},
   methods: {
     formatDatum(datum) {
       return datum.substring(0, 10);

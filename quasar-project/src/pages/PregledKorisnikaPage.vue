@@ -19,12 +19,13 @@
         row-key="korisnik_id"
         flat
         bordered
+        dark
         :filter="filter"
       >
         <template v-slot:top>
           <div class="text-subtitle1 text-weight-bold">Svi korisnici</div>
           <q-space />
-          <q-input v-model="filter" dense outlined placeholder="Pretraži..." debounce="300">
+          <q-input v-model="filter" dense outlined placeholder="Pretraži..." debounce="300" dark label-color="grey-4">
             <template v-slot:append><q-icon name="search" /></template>
           </q-input>
         </template>

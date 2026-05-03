@@ -145,6 +145,14 @@ app.get("/termini/:termin_id", (req, res) => {
   );
 });
 
+// Popunjenost kapaciteta
+app.get("/termini/:termin_id/popunjenost", (req, res) => {
+  db.query("SELECT COUNT(*) as broj FROM rezervacijaGT WHERE termin_id = ?", [req.params.termin_id], (err, results) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json({ broj: results[0].broj });
+  });
+});
+
 // Dodaj novi termin (admin)
 app.post("/termini", (req, res) => {
   const { datum, vrijeme, korisnik_id, trajanje, vrsta_treninga, opis, max_kapacitet } = req.body;
@@ -152,6 +160,16 @@ app.post("/termini", (req, res) => {
   db.query(sql, [datum, vrijeme, korisnik_id, trajanje, vrsta_treninga, opis, max_kapacitet], (err) => {
     if (err) return res.status(500).json({ message: "Greška" });
     res.json({ message: "Termin kreiran" });
+  });
+});
+
+// Uredi termin (admin)
+app.put("/termini/:termin_id", (req, res) => {
+  const { datum, vrijeme, vrsta_treninga, opis, trajanje, max_kapacitet } = req.body;
+  const sql = `UPDATE terminGT SET datum=?, vrijeme=?, vrsta_treninga=?, opis=?, trajanje=?, max_kapacitet=? WHERE termin_id=?`;
+  db.query(sql, [datum, vrijeme, vrsta_treninga, opis, trajanje, max_kapacitet, req.params.termin_id], (err) => {
+    if (err) return res.status(500).json({ message: "Greška" });
+    res.json({ message: "Termin ažuriran" });
   });
 });
 

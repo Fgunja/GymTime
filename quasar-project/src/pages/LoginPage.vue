@@ -1,22 +1,31 @@
 <template>
-  <q-page class="flex flex-center bg-grey-2">
-    <q-card style="width: 350px" class="q-pa-md">
+  <q-page class="flex flex-center" style="background-color: #121212;">
+    <q-card style="width: 350px; background-color: #1e1e1e;" class="q-pa-md">
       <q-card-section>
         <div class="text-h6 text-center text-primary">Login</div>
       </q-card-section>
 
       <q-card-section>
-        <q-input v-model="username" label="Username" outlined class="q-mb-md" />
-        <q-input v-model="lozinka" label="Lozinka" type="password" outlined />
+        <q-input
+          v-model="username"
+          label="Username"
+          outlined
+          dark
+          label-color="grey-4"
+          class="q-mb-md"
+        />
+        <q-input
+          v-model="lozinka"
+          label="Lozinka"
+          type="password"
+          outlined
+          dark
+          label-color="grey-4"
+        />
       </q-card-section>
 
       <q-card-actions>
-        <q-btn
-          label="Login"
-          color="primary"
-          class="full-width"
-          @click="login"
-        />
+        <q-btn label="Login" color="primary" class="full-width" @click="login" />
       </q-card-actions>
     </q-card>
   </q-page>
@@ -34,33 +43,20 @@ export default {
       lozinka: "",
     };
   },
-
   methods: {
     async login() {
       const auth = useAuth();
-
       try {
         const res = await axios.post("http://localhost:3000/login", {
           username: this.username,
           lozinka: this.lozinka,
         });
-
         const user = res.data.user;
-
         auth.setUser(user);
-
-        // 🔥 SVI IDU NA /app
         this.$router.replace("/app");
-
-        Notify.create({
-          type: "positive",
-          message: `Dobrodošao ${user.username}`,
-        });
+        Notify.create({ type: "positive", message: `Dobrodošao ${user.username}` });
       } catch (err) {
-        Notify.create({
-          type: "negative",
-          message: "Krivi podaci",
-        });
+        Notify.create({ type: "negative", message: "Krivi podaci" });
       }
     },
   },

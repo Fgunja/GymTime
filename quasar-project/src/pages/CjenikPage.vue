@@ -19,6 +19,7 @@
         :columns="columnsAdmin"
         row-key="cjenik_id"
         flat bordered
+        dark
       >
         <template v-slot:body-cell-akcije="props">
           <q-td :props="props">
@@ -29,7 +30,7 @@
 
       <!-- DIALOG: dodaj / uredi paket -->
       <q-dialog v-model="dialog" persistent>
-        <q-card style="min-width: 380px">
+        <q-card style="min-width: 380px; background-color: #1e1e1e;">
           <q-card-section class="bg-primary text-white">
             <div class="text-h6">{{ editPaket.cjenik_id ? 'Uredi paket' : 'Novi paket' }}</div>
           </q-card-section>
@@ -39,12 +40,16 @@
               v-model="editPaket.naziv_paketa"
               label="Naziv paketa *"
               outlined dense
+              dark
+              label-color="grey-4"
               :rules="[val => !!val || 'Obavezno']"
             />
             <q-input
               v-model.number="editPaket.cijena"
               label="Cijena (€) *"
               outlined dense
+              dark
+              label-color="grey-4"
               type="number"
               :rules="[val => val > 0 || 'Mora biti veće od 0']"
             />
@@ -52,6 +57,8 @@
               v-model.number="editPaket.trajanje_dana"
               label="Trajanje (dana) *"
               outlined dense
+              dark
+              label-color="grey-4"
               type="number"
               :rules="[val => val > 0 || 'Mora biti veće od 0']"
             />
@@ -59,6 +66,8 @@
               v-model="editPaket.opis"
               label="Opis"
               outlined dense
+              dark
+              label-color="grey-4"
               type="textarea"
               rows="3"
             />
@@ -105,7 +114,7 @@
               <div class="text-grey-7">{{ p.trajanje_dana }} dana</div>
             </q-card-section>
             <q-separator />
-            <q-card-section class="text-grey-8">{{ p.opis }}</q-card-section>
+            <q-card-section class="text-grey-4">{{ p.opis }}</q-card-section>
             <q-card-actions align="center">
               <q-btn
                 v-if="!aktivnaPretplata"

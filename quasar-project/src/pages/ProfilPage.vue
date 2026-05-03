@@ -63,7 +63,7 @@
     </q-card>
 
     <!-- Status pretplate -->
-    <q-card bordered class="q-mb-md">
+    <q-card v-if="user.uloga !== 'admin'" bordered class="q-mb-md">
       <q-card-section>
         <div class="text-subtitle1 text-weight-bold q-mb-sm">
           <q-icon name="card_membership" class="q-mr-xs text-primary" />
@@ -75,7 +75,7 @@
         </div>
 
         <div v-else-if="pretplata && pretplata.aktivna">
-          <q-banner class="bg-green-1 text-green-9 rounded-borders q-mb-sm">
+          <q-banner class="bg-green-9 text-white rounded-borders q-mb-sm">
             <template v-slot:avatar>
               <q-icon name="check_circle" color="green" />
             </template>
@@ -114,7 +114,7 @@
         </div>
 
         <div v-else>
-          <q-banner class="bg-orange-1 text-orange-9 rounded-borders q-mb-sm">
+          <q-banner class="bg-orange-9 text-white rounded-borders q-mb-sm">
             <template v-slot:avatar>
               <q-icon name="warning" color="orange" />
             </template>
@@ -133,7 +133,7 @@
     </q-card>
 
     <!-- Statistika -->
-    <q-card bordered class="q-mb-md">
+    <q-card v-if="user.uloga !== 'admin'" bordered class="q-mb-md">
       <q-card-section>
         <div class="text-subtitle1 text-weight-bold q-mb-md">
           <q-icon name="bar_chart" class="q-mr-xs text-primary" />

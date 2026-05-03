@@ -2,7 +2,7 @@
   <q-layout>
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <!-- 🔥 SMART TITLE -->
+        <!-- SMART TITLE -->
         <q-toolbar-title
           class="cursor-pointer text-weight-bold"
           @click="goHome"
@@ -19,7 +19,7 @@
 
         <!-- LOGGED USER -->
         <div v-else class="row items-center q-gutter-sm">
-          👤 {{ auth.state.user.username }}
+           {{ auth.state.user.username }}
 
           <q-btn flat icon="logout" @click="logout" />
         </div>
@@ -44,19 +44,19 @@ export default {
     const goHome = () => {
       const user = auth.state.user;
 
-      // 👤 guest
+      //  guest
       if (!user) {
         router.push("/");
         return;
       }
 
-      // 👑 admin
+      //  admin
       if (user.uloga === "admin") {
         router.push("/admin");
         return;
       }
 
-      // 👤 user
+      //  user
       router.push("/app");
     };
 

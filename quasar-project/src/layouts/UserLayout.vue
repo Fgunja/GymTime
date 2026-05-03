@@ -1,22 +1,23 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-dark text-white">
       <q-toolbar>
-        <q-toolbar-title
-          class="cursor-pointer text-weight-bold"
-          @click="$router.push('/app')"
-        >
-          GymTime
-        </q-toolbar-title>
+  <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
+  <q-toolbar-title
+    class="cursor-pointer text-weight-bold"
+    @click="$router.push('/app')"
+  >
+    GymTime
+  </q-toolbar-title>
 
-        <div class="row items-center q-gutter-sm">
-          👤 {{ auth.state.user?.username }}
-          <q-btn flat icon="logout" @click="logout" />
-        </div>
-      </q-toolbar>
+  <div class="row items-center q-gutter-sm">
+     {{ auth.state.user?.username }}
+    <q-btn flat icon="logout" @click="logout" />
+  </div>
+</q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above bordered>
+    <q-drawer v-model="drawer" show-if-above bordered class="bg-dark text-white">
       <q-list>
         <!-- KORISNIČKE STRANICE -->
         <q-item-label header class="text-grey-7">Izbornik</q-item-label>
@@ -33,7 +34,7 @@
           <q-item-section>Termini</q-item-section>
         </q-item>
 
-        <q-item to="/app/rezervacije" clickable v-ripple>
+        <q-item v-if="auth.state.user?.uloga !== 'admin'" to="/app/rezervacije" clickable v-ripple>
           <q-item-section avatar><q-icon name="event" /></q-item-section>
           <q-item-section>Rezervacije</q-item-section>
         </q-item>
@@ -77,18 +78,32 @@
 <script>
 import { useAuth } from "src/auth";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 export default {
   setup() {
     const auth = useAuth();
     const router = useRouter();
+    const drawer = ref(false);
 
     const logout = () => {
       auth.logout();
       router.push("/");
     };
 
-    return { auth, logout };
+    return { auth, logout, drawer };
   },
 };
 </script>
+
+<style scoped>
+.q-drawer .q-item {
+  color: white;
+}
+.q-drawer .q-item--active {
+  color: #FF6B00;
+}
+.q-item-label--header {
+  color: #888 !important;
+}
+</style>

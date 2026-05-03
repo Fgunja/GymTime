@@ -15,6 +15,8 @@
             v-model="poruka"
             label="Poruka *"
             outlined
+            dark
+            label-color="grey-4"
             type="textarea"
             rows="4"
             class="q-mb-md"

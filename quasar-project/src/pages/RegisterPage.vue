@@ -1,25 +1,20 @@
 <template>
-  <q-page class="flex flex-center bg-grey-2">
-    <q-card style="width: 400px" class="q-pa-md">
+  <q-page class="flex flex-center" style="background-color: #121212;">
+    <q-card style="width: 400px; background-color: #1e1e1e;" class="q-pa-md">
       <q-card-section>
-        <div class="text-h5 text-center">Register</div>
+        <div class="text-h5 text-center text-primary">Registracija</div>
       </q-card-section>
 
-      <q-card-section>
-        <q-input v-model="username" label="Username" outlined />
-        <q-input v-model="ime" label="Ime" outlined />
-        <q-input v-model="prezime" label="Prezime" outlined />
-        <q-input v-model="email" label="Email" outlined />
-        <q-input v-model="lozinka" label="Lozinka" type="password" outlined />
+      <q-card-section class="q-gutter-sm">
+        <q-input v-model="username" label="Username" outlined dark label-color="grey-4" />
+        <q-input v-model="ime" label="Ime" outlined dark label-color="grey-4" />
+        <q-input v-model="prezime" label="Prezime" outlined dark label-color="grey-4" />
+        <q-input v-model="email" label="Email" outlined dark label-color="grey-4" />
+        <q-input v-model="lozinka" label="Lozinka" type="password" outlined dark label-color="grey-4" />
       </q-card-section>
 
       <q-card-actions>
-        <q-btn
-          label="Register"
-          color="primary"
-          class="full-width"
-          @click="register"
-        />
+        <q-btn label="Registriraj se" color="primary" class="full-width" @click="register" />
       </q-card-actions>
     </q-card>
   </q-page>
@@ -27,6 +22,7 @@
 
 <script>
 import axios from "axios";
+import { Notify } from "quasar";
 
 export default {
   data() {
@@ -38,7 +34,6 @@ export default {
       lozinka: "",
     };
   },
-
   methods: {
     async register() {
       try {
@@ -49,11 +44,10 @@ export default {
           email: this.email,
           lozinka: this.lozinka,
         });
-
-        alert("Registracija uspješna");
+        Notify.create({ type: "positive", message: "Registracija uspješna!" });
         this.$router.push("/login");
       } catch (err) {
-        alert("Greška");
+        Notify.create({ type: "negative", message: "Greška pri registraciji" });
       }
     },
   },

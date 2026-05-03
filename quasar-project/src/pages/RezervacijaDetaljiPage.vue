@@ -79,9 +79,13 @@
         <q-card-section>
           <div class="row q-col-gutter-sm text-center">
             <div class="col-2">
-              <div class="text-h6 text-primary">{{ termin.max_kapacitet }}</div>
-              <div class="text-caption text-grey">Max kapacitet</div>
-            </div>
+  <div class="text-h6 text-primary">{{ termin.max_kapacitet }}</div>
+  <div class="text-caption text-grey">Max kapacitet</div>
+</div>
+<div class="col-2">
+  <div class="text-h6 text-primary">{{ popunjenost }}/{{ termin.max_kapacitet }}</div>
+  <div class="text-caption text-grey">Zauzeto</div>
+</div>
           </div>
         </q-card-section>
       </q-card>
@@ -140,6 +144,7 @@ export default {
       termin: null,
       loading: true,
       dijalogOtkaz: false,
+      popunjenost: 0,
     };
   },
   async mounted() {
@@ -155,6 +160,8 @@ export default {
         try {
           const terminRes = await axios.get(`http://localhost:3000/termini/${this.rezervacija.termin_id}`);
           this.termin = terminRes.data;
+          const pop = await axios.get(`http://localhost:3000/termini/${this.rezervacija.termin_id}/popunjenost`);
+this.popunjenost = pop.data.broj;
         } catch {
         }
       }
@@ -170,7 +177,7 @@ export default {
       return datum.substring(0, 10);
     },
     statusBoja(status) {
-      if (status === 'aktivna') return 'positive';
+      if (status === 'potvrđena') return 'positive';
       if (status === 'otkazana') return 'negative';
       return 'grey';
     },

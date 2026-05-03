@@ -1,15 +1,15 @@
 <template>
-  <q-page class="bg-grey-2">
+  <q-page class="bg-dark">
     <!-- HERO SECTION -->
     <div class="hero q-pa-xl flex flex-center text-center">
       <div>
         <h1 class="text-primary text-weight-bold q-mb-sm">GymTime</h1>
 
-        <h5 class="text-grey-8 q-mb-lg">
+        <h5 class="text-grey-4 q-mb-lg">
           Pametna aplikacija za rezervaciju trening termina
         </h5>
 
-        <p class="text-grey-7" style="max-width: 700px; margin: 0 auto">
+        <p class="text-grey-4" style="max-width: 700px; margin: 0 auto">
           Organiziraj svoje treninge bez stresa. Rezerviraj termine, prati
           dostupnost i upravljaj svojim rasporedom u samo par klikova.
         </p>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- FEATURES -->
-    <div class="q-pa-xl bg-white">
+    <div class="q-pa-xl bg-dark">
       <div class="text-center q-mb-lg">
         <h4 class="text-primary">Što možeš raditi?</h4>
       </div>
@@ -58,19 +58,19 @@
         <div class="col-12 col-md-3 text-center">
           <q-icon name="event" size="56px" color="primary" />
           <h6>Rezervacija termina</h6>
-          <p class="text-grey-7">Brzo i jednostavno rezerviraj trening.</p>
+          <p class="text-grey-4">Brzo i jednostavno rezerviraj trening.</p>
         </div>
 
         <div class="col-12 col-md-3 text-center">
           <q-icon name="schedule" size="56px" color="primary" />
           <h6>Praćenje rasporeda</h6>
-          <p class="text-grey-7">Uvijek znaš kada treniraš.</p>
+          <p class="text-grey-4">Uvijek znaš kada treniraš.</p>
         </div>
 
         <div class="col-12 col-md-3 text-center">
           <q-icon name="notifications" size="56px" color="primary" />
           <h6>Obavijesti</h6>
-          <p class="text-grey-7">Bitne informacije na jednom mjestu.</p>
+          <p class="text-grey-4">Bitne informacije na jednom mjestu.</p>
         </div>
       </div>
     </div>
@@ -91,6 +91,6 @@ export default {
 <style scoped>
 .hero {
   min-height: 60vh;
-  background: linear-gradient(to bottom, #ffffff, #f3f3f3);
+  background: linear-gradient(to bottom, #1a1a1a, #121212);
 }
 </style>

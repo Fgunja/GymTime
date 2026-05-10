@@ -86,14 +86,14 @@
               <q-item-section avatar><q-icon name="sell" color="grey" /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Naziv paketa</q-item-label>
-                <q-item-label>{{ pretplata.pretplata.naziv_paketa }}</q-item-label>
+                <q-item-label>{{ pretplata.pretplata.CjenikGT?.naziv_paketa || pretplata.pretplata.naziv_pretplate }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section avatar><q-icon name="euro" color="grey" /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Cijena</q-item-label>
-                <q-item-label>{{ pretplata.pretplata.cijena }} €</q-item-label>
+                <q-item-label>{{ pretplata.pretplata.CjenikGT?.cijena }} €</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>

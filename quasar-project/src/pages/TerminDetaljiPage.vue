@@ -38,8 +38,17 @@
         </q-card-section>
 
         <q-card-actions v-if="!isAdmin">
-          <q-btn color="primary" label="Rezerviraj" class="full-width" @click="rezerviraj" />
-        </q-card-actions>
+  <q-btn
+    v-if="!jeProsao"
+    color="primary"
+    label="Rezerviraj"
+    class="full-width"
+    @click="rezerviraj"
+  />
+  <q-banner v-else class="bg-grey-8 text-white full-width">
+    Ovaj termin je prošao i ne može se više rezervirati.
+  </q-banner>
+</q-card-actions>
       </q-card>
     </div>
 
@@ -70,6 +79,11 @@ export default {
       const auth = useAuth();
       return auth.state.user?.uloga === "admin";
     },
+    jeProsao() {
+  if (!this.termin) return false;
+  const danas = new Date().toISOString().split("T")[0];
+  return this.termin.datum < danas;
+},
   },
   async mounted() {
     const id = this.$route.params.termin_id;

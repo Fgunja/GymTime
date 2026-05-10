@@ -54,10 +54,11 @@
             <!-- Termini tog dana -->
 <div v-for="t in dan.termini" :key="t.termin_id">
   <q-badge
-  :color="popunjenosti[t.termin_id] >= t.max_kapacitet ? 'negative' : 'positive'"
-  class="cursor-pointer q-mb-xs full-width"
+  :color="dan.datum < danasStr ? 'grey-6' : popunjenosti[t.termin_id] >= t.max_kapacitet ? 'negative' : 'positive'"
+  class="q-mb-xs full-width"
+  :class="dan.datum < danasStr ? '' : 'cursor-pointer'"
   style="white-space: normal; display: block;"
-  @click="isAdmin ? otvoriOpcije(t) : $router.push('/app/termini/' + t.termin_id)"
+  @click="dan.datum >= danasStr && (isAdmin ? otvoriOpcije(t) : $router.push('/app/termini/' + t.termin_id))"
 >
   {{ t.vrijeme.substring(0, 5) }} {{ t.vrsta_treninga }}
 </q-badge>
@@ -159,6 +160,7 @@ export default {
       uredi: {},
       brise: false,
       sprema: false,
+      danasStr: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
     };
     
   },
@@ -322,6 +324,11 @@ export default {
       }
     },
     async dodajTermin() {
+      const danas = new Date().toISOString().split("T")[0];
+  if (this.novi.datum < danas) {
+    this.$q.notify({ type: "negative", message: "Ne možete dodati termin s prošlim datumom." });
+    return;
+  }
       const auth = useAuth();
       const korisnik_id = auth.state.user?.korisnik_id;
       try {

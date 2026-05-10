@@ -1,6 +1,12 @@
 <template>
   <q-page class="q-pa-md">
-    <q-btn flat icon="arrow_back" label="Natrag na rezervacije" @click="$router.push('/app/rezervacije')" class="q-mb-md" />
+    <q-btn
+      flat
+      icon="arrow_back"
+      label="Natrag na rezervacije"
+      @click="$router.push('/app/rezervacije')"
+      class="q-mb-md"
+    />
 
     <div v-if="loading" class="flex flex-center q-mt-xl">
       <q-spinner-dots color="primary" size="50px" />
@@ -16,7 +22,9 @@
           <div class="row items-center q-gutter-sm">
             <q-icon name="fitness_center" size="28px" />
             <div>
-              <div class="text-h6">{{ rezervacija.vrsta_treninga }}</div>
+              <div class="text-h6">
+                {{ rezervacija.TerminGT?.vrsta_treninga }}
+              </div>
             </div>
             <q-space />
             <q-badge
@@ -35,28 +43,40 @@
             <div class="col-12 col-sm-6">
               <div class="text-caption text-grey">Datum treninga</div>
               <div class="text-body1 text-weight-medium">
-                <q-icon name="calendar_today" size="16px" class="q-mr-xs text-primary" />
-                {{ formatDatum(rezervacija.datum) }}
+                <q-icon
+                  name="calendar_today"
+                  size="16px"
+                  class="q-mr-xs text-primary"
+                />
+                {{ formatDatum(rezervacija.TerminGT?.datum) }}
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="text-caption text-grey">Vrijeme</div>
               <div class="text-body1 text-weight-medium">
-                <q-icon name="schedule" size="16px" class="q-mr-xs text-primary" />
-                {{ rezervacija.vrijeme }}
+                <q-icon
+                  name="schedule"
+                  size="16px"
+                  class="q-mr-xs text-primary"
+                />
+                {{ rezervacija.TerminGT?.vrijeme }}
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="text-caption text-grey">Trajanje</div>
               <div class="text-body1 text-weight-medium">
                 <q-icon name="timer" size="16px" class="q-mr-xs text-primary" />
-                {{ rezervacija.trajanje }} minuta
+                {{ rezervacija.TerminGT?.trajanje }} minuta
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="text-caption text-grey">Datum rezervacije</div>
               <div class="text-body1 text-weight-medium">
-                <q-icon name="event_available" size="16px" class="q-mr-xs text-primary" />
+                <q-icon
+                  name="event_available"
+                  size="16px"
+                  class="q-mr-xs text-primary"
+                />
                 {{ formatDatum(rezervacija.datum_rezervacije) }}
               </div>
             </div>
@@ -72,20 +92,22 @@
             O treningu
           </div>
           <div class="text-body2 text-grey-8">
-            {{ termin.opis || 'Nema opisa treninga.' }}
+            {{ termin.opis || "Nema opisa treninga." }}
           </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
           <div class="row q-col-gutter-sm text-center">
             <div class="col-2">
-  <div class="text-h6 text-primary">{{ termin.max_kapacitet }}</div>
-  <div class="text-caption text-grey">Max kapacitet</div>
-</div>
-<div class="col-2">
-  <div class="text-h6 text-primary">{{ popunjenost }}/{{ termin.max_kapacitet }}</div>
-  <div class="text-caption text-grey">Zauzeto</div>
-</div>
+              <div class="text-h6 text-primary">{{ termin.max_kapacitet }}</div>
+              <div class="text-caption text-grey">Max kapacitet</div>
+            </div>
+            <div class="col-2">
+              <div class="text-h6 text-primary">
+                {{ popunjenost }}/{{ termin.max_kapacitet }}
+              </div>
+              <div class="text-caption text-grey">Zauzeto</div>
+            </div>
           </div>
         </q-card-section>
       </q-card>
@@ -93,7 +115,9 @@
       <!-- Akcije -->
 
       <q-card-section>
-        <div class="text-subtitle2 text-grey-7 q-mb-sm">Upravljanje rezervacijom</div>
+        <div class="text-subtitle2 text-grey-7 q-mb-sm">
+          Upravljanje rezervacijom
+        </div>
         <q-btn
           color="negative"
           outline
@@ -119,8 +143,8 @@
         </q-card-section>
         <q-card-section class="q-pt-none text-body2">
           Jeste li sigurni da želite otkazati rezervaciju za
-          <strong>{{ rezervacija?.vrsta_treninga }}</strong>
-          dana {{ formatDatum(rezervacija?.datum) }}?
+          <strong>{{ rezervacija?.TerminGT?.vrsta_treninga }}</strong>
+          dana {{ formatDatum(rezervacija?.TerminGT?.datum) }}?
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Odustani" v-close-popup />
@@ -132,12 +156,12 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { useAuth } from 'src/auth';
-import { Notify } from 'quasar';
+import axios from "axios";
+import { useAuth } from "src/auth";
+import { Notify } from "quasar";
 
 export default {
-  name: 'RezervacijaDetaljiPage',
+  name: "RezervacijaDetaljiPage",
   data() {
     return {
       rezervacija: null,
@@ -153,45 +177,52 @@ export default {
     const korisnik_id = auth.state.user?.korisnik_id;
 
     try {
-      const res = await axios.get(`http://localhost:3000/rezervacije/${korisnik_id}`);
-      this.rezervacija = res.data.find(r => r.rezervacija_id == id) || null;
+      const res = await axios.get(
+        `http://localhost:3000/rezervacije/${korisnik_id}`
+      );
+      this.rezervacija = res.data.find((r) => r.rezervacija_id == id) || null;
 
       if (this.rezervacija) {
         try {
-          const terminRes = await axios.get(`http://localhost:3000/termini/${this.rezervacija.termin_id}`);
+          const terminRes = await axios.get(
+            `http://localhost:3000/termini/${this.rezervacija.termin_id}`
+          );
           this.termin = terminRes.data;
-          const pop = await axios.get(`http://localhost:3000/termini/${this.rezervacija.termin_id}/popunjenost`);
-this.popunjenost = pop.data.broj;
-        } catch {
-        }
+          const pop = await axios.get(
+            `http://localhost:3000/termini/${this.rezervacija.termin_id}/popunjenost`
+          );
+          this.popunjenost = pop.data.broj;
+        } catch {}
       }
     } catch (err) {
-      console.log('Greška pri dohvaćanju rezervacije', err);
+      console.log("Greška pri dohvaćanju rezervacije", err);
     } finally {
       this.loading = false;
     }
   },
   methods: {
     formatDatum(datum) {
-      if (!datum) return '–';
+      if (!datum) return "–";
       return datum.substring(0, 10);
     },
     statusBoja(status) {
-      if (status === 'potvrđena') return 'positive';
-      if (status === 'otkazana') return 'negative';
-      return 'grey';
+      if (status === "potvrđena") return "positive";
+      if (status === "otkazana") return "negative";
+      return "grey";
     },
     potvrdiOtkazivanje() {
       this.dijalogOtkaz = true;
     },
     async otkazi() {
       try {
-        await axios.delete(`http://localhost:3000/rezervacije/${this.rezervacija.rezervacija_id}`);
-        Notify.create({ type: 'positive', message: 'Rezervacija otkazana.' });
-        this.rezervacija.status_rezervacije = 'otkazana';
+        await axios.delete(
+          `http://localhost:3000/rezervacije/${this.rezervacija.rezervacija_id}`
+        );
+        Notify.create({ type: "positive", message: "Rezervacija otkazana." });
+        this.rezervacija.status_rezervacije = "otkazana";
         this.dijalogOtkaz = false;
       } catch (err) {
-        Notify.create({ type: 'negative', message: 'Greška pri otkazivanju.' });
+        Notify.create({ type: "negative", message: "Greška pri otkazivanju." });
         this.dijalogOtkaz = false;
       }
     },

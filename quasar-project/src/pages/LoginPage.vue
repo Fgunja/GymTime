@@ -1,8 +1,8 @@
 <template>
-  <q-page class="flex flex-center" style="background-color: #121212;">
-    <q-card style="width: 350px; background-color: #1e1e1e;" class="q-pa-md">
+  <q-page class="flex flex-center" style="background-color: #121212">
+    <q-card style="width: 350px; background-color: #1e1e1e" class="q-pa-md">
       <q-card-section>
-        <div class="text-h6 text-center text-primary">Login</div>
+        <div class="text-h6 text-center text-primary">Prijava</div>
       </q-card-section>
 
       <q-card-section>
@@ -25,7 +25,12 @@
       </q-card-section>
 
       <q-card-actions>
-        <q-btn label="Login" color="primary" class="full-width" @click="login" />
+        <q-btn
+          label="Prijavi se"
+          color="primary"
+          class="full-width"
+          @click="login"
+        />
       </q-card-actions>
     </q-card>
   </q-page>
@@ -54,7 +59,10 @@ export default {
         const user = res.data.user;
         auth.setUser(user);
         this.$router.replace("/app");
-        Notify.create({ type: "positive", message: `Dobrodošao ${user.username}` });
+        Notify.create({
+          type: "positive",
+          message: `Dobrodošao ${user.username}`,
+        });
       } catch (err) {
         Notify.create({ type: "negative", message: "Krivi podaci" });
       }

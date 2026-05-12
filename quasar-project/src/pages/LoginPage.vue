@@ -2,7 +2,7 @@
   <q-page class="flex flex-center" style="background-color: #121212">
     <q-card style="width: 350px; background-color: #1e1e1e" class="q-pa-md">
       <q-card-section>
-        <div class="text-h6 text-center text-primary">Prijava</div>
+        <div class="text-h6 text-center text-primary">Login</div>
       </q-card-section>
 
       <q-card-section>
@@ -26,7 +26,7 @@
 
       <q-card-actions>
         <q-btn
-          label="Prijavi se"
+          label="Login"
           color="primary"
           class="full-width"
           @click="login"
@@ -57,7 +57,7 @@ export default {
           lozinka: this.lozinka,
         });
         const user = res.data.user;
-        auth.setUser(user);
+        auth.setUser(user, res.data.token);
         this.$router.replace("/app");
         Notify.create({
           type: "positive",

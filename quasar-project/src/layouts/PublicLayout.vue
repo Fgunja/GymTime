@@ -5,16 +5,17 @@
         <!-- 🔥 SMART TITLE -->
         <q-toolbar-title
           class="cursor-pointer text-weight-bold"
+          style="flex-shrink: 0; font-size: 14px"
           @click="goHome"
         >
           GymTime
         </q-toolbar-title>
 
         <!-- GUEST -->
-        <div v-if="!auth.state.user" class="row q-gutter-sm">
-          <q-btn flat label="Prijava" to="/login" />
-          <q-btn flat label="Registracija" to="/register" />
-          <q-btn flat label="Cjenik" to="/cjenik" />
+        <div v-if="!auth.state.user" class="row q-gutter-xs">
+          <q-btn flat dense label="Prijava" to="/login" />
+          <q-btn flat dense icon="person_add" to="/register" />
+          <q-btn flat dense icon="sell" to="/cjenik" />
         </div>
 
         <!-- LOGGED USER -->

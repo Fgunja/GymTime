@@ -174,6 +174,7 @@
 <script>
 import axios from "axios";
 import { useAuth } from "src/auth";
+import API from "src/api";
 
 export default {
   setup() {
@@ -231,7 +232,7 @@ export default {
     async fetchCjenik() {
       this.loading = true;
       try {
-        const res = await axios.get("http://localhost:3000/cjenik");
+        const res = await axios.get(`${API}/cjenik`);
         this.paketi = res.data;
       } catch {
         this.$q.notify({
@@ -245,7 +246,7 @@ export default {
     async fetchAktivnaPretplata() {
       try {
         const res = await axios.get(
-          `http://localhost:3000/pretplata/${this.user.korisnik_id}`
+          `${API}/pretplata/${this.user.korisnik_id}`
         );
         if (res.data.aktivna) this.aktivnaPretplata = res.data.pretplata;
       } catch {
@@ -263,12 +264,12 @@ export default {
       try {
         if (this.editPaket.cjenik_id) {
           await axios.put(
-            `http://localhost:3000/cjenik/${this.editPaket.cjenik_id}`,
+            `${API}/cjenik/${this.editPaket.cjenik_id}`,
             this.editPaket
           );
           this.$q.notify({ type: "positive", message: "Paket ažuriran!" });
         } else {
-          await axios.post("http://localhost:3000/cjenik", this.editPaket);
+          await axios.post(`${API}/cjenik`, this.editPaket);
           this.$q.notify({ type: "positive", message: "Paket dodan!" });
         }
         this.dialog = false;
@@ -286,7 +287,7 @@ export default {
       }
       this.loadingPretplata = paket.cjenik_id;
       try {
-        await axios.post("http://localhost:3000/pretplata", {
+        await axios.post(`${API}/pretplata`, {
           korisnik_id: this.user.korisnik_id,
           cjenik_id: paket.cjenik_id,
         });

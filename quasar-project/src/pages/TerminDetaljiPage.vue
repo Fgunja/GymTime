@@ -1,6 +1,12 @@
 <template>
   <q-page class="q-pa-md">
-    <q-btn flat icon="arrow_back" label="Natrag" @click="$router.back()" class="q-mb-md" />
+    <q-btn
+      flat
+      icon="arrow_back"
+      label="Natrag"
+      @click="$router.back()"
+      class="q-mb-md"
+    />
 
     <div v-if="termin">
       <q-card class="q-pa-md">
@@ -24,9 +30,11 @@
               <div class="text-body1">{{ termin.max_kapacitet }} osoba</div>
             </div>
             <div class="col-2">
-      <div class="text-h6 text-primary">{{ popunjenost }}/{{ termin.max_kapacitet }}</div>
-      <div class="text-caption text-grey">Zauzeto</div>
-    </div>
+              <div class="text-h6 text-primary">
+                {{ popunjenost }}/{{ termin.max_kapacitet }}
+              </div>
+              <div class="text-caption text-grey">Zauzeto</div>
+            </div>
           </div>
         </q-card-section>
 
@@ -38,27 +46,26 @@
         </q-card-section>
 
         <q-card-actions v-if="!isAdmin">
-  <q-btn
-    v-if="!jeProsao"
-    color="primary"
-    label="Rezerviraj"
-    class="full-width"
-    @click="rezerviraj"
-  />
-  <q-banner v-else class="bg-grey-8 text-white full-width">
-    Ovaj termin je prošao i ne može se više rezervirati.
-  </q-banner>
-</q-card-actions>
+          <q-btn
+            v-if="!jeProsao"
+            color="primary"
+            label="Rezerviraj"
+            class="full-width"
+            @click="rezerviraj"
+          />
+          <q-banner v-else class="bg-grey-8 text-white full-width">
+            Ovaj termin je prošao i ne može se više rezervirati.
+          </q-banner>
+        </q-card-actions>
       </q-card>
     </div>
 
-    <div v-else class="text-center text-grey q-mt-xl">
-      Učitavanje...
-    </div>
+    <div v-else class="text-center text-grey q-mt-xl">Učitavanje...</div>
   </q-page>
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { useQuasar } from "quasar";
@@ -69,33 +76,33 @@ export default {
     return { $q };
   },
   data() {
-  return { 
-    termin: null,
-    popunjenost: 0,
-  };
-},
+    return {
+      termin: null,
+      popunjenost: 0,
+    };
+  },
   computed: {
     isAdmin() {
       const auth = useAuth();
       return auth.state.user?.uloga === "admin";
     },
     jeProsao() {
-  if (!this.termin) return false;
-  const danas = new Date().toISOString().split("T")[0];
-  return this.termin.datum < danas;
-},
+      if (!this.termin) return false;
+      const danas = new Date().toISOString().split("T")[0];
+      return this.termin.datum < danas;
+    },
   },
   async mounted() {
     const id = this.$route.params.termin_id;
     try {
-    const res = await axios.get(`http://localhost:3000/termini/${id}`);
-    this.termin = res.data;
-    const pop = await axios.get(`http://localhost:3000/termini/${id}/popunjenost`);
-    this.popunjenost = pop.data.broj;
-  } catch (err) {
-    console.log("Greška pri dohvaćanju termina", err);
-  }
-},
+      const res = await axios.get(`${API}/termini/${id}`);
+      this.termin = res.data;
+      const pop = await axios.get(`${API}/termini/${id}/popunjenost`);
+      this.popunjenost = pop.data.broj;
+    } catch (err) {
+      console.log("Greška pri dohvaćanju termina", err);
+    }
+  },
   methods: {
     formatDatum(datum) {
       return datum.substring(0, 10);
@@ -104,14 +111,17 @@ export default {
       const auth = useAuth();
       const korisnik_id = auth.state.user?.korisnik_id;
       try {
-        await axios.post("http://localhost:3000/rezervacije", {
+        await axios.post(`${API}/rezervacije`, {
           korisnik_id,
           termin_id: this.termin.termin_id,
         });
         this.$q.notify({ type: "positive", message: "Rezervacija uspješna!" });
         this.$router.push("/app/termini");
       } catch (err) {
-        this.$q.notify({ type: "negative", message: err.response?.data?.message || "Greška" });
+        this.$q.notify({
+          type: "negative",
+          message: err.response?.data?.message || "Greška",
+        });
       }
     },
   },

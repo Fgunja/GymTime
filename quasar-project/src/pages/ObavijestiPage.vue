@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { Notify } from "quasar";
@@ -169,8 +170,8 @@ export default {
       this.loading = true;
       try {
         const url = this.jeAdmin
-          ? "http://localhost:3000/obavijesti"
-          : `http://localhost:3000/obavijesti/${this.korisnik_id}`;
+          ? `${API}/obavijesti`
+          : `${API}/obavijesti/${this.korisnik_id}`;
         const res = await axios.get(url);
         if (this.jeAdmin) {
           const videne = new Set();
@@ -193,9 +194,7 @@ export default {
       this.dijalog = true;
       if (!o.procitano) {
         try {
-          await axios.put(
-            "http://localhost:3000/obavijesti/" + o.obavijest_id + "/procitano"
-          );
+          await axios.put(`${API}/obavijesti/` + o.obavijest_id + "/procitano");
           o.procitano = true;
         } catch (err) {
           console.log("Greška kod označavanja obavijesti", err);
@@ -206,11 +205,11 @@ export default {
       this.saljem = true;
       try {
         // Dohvati sve korisnike pa za svakog upiši obavijest
-        const res = await axios.get("http://localhost:3000/korisnici");
+        const res = await axios.get(`${API}/korisnici`);
         const korisnici = res.data.filter((k) => k.uloga !== "admin");
         await Promise.all(
           korisnici.map((k) =>
-            axios.post("http://localhost:3000/obavijesti", {
+            axios.post(`${API}/obavijesti`, {
               korisnik_id: k.korisnik_id,
               poruka: this.poruka,
             })

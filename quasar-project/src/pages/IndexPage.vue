@@ -3,13 +3,26 @@
     <!-- HERO SECTION -->
     <div class="hero q-pa-xl flex flex-center text-center">
       <div>
-        <h1 class="text-primary text-weight-bold q-mb-sm">GymTime</h1>
+        <h1
+          class="text-primary text-weight-bold q-mb-sm"
+          style="font-size: clamp(2rem, 10vw, 4rem)"
+        >
+          GymTime
+        </h1>
 
         <h5 class="text-grey-4 q-mb-lg">
           Pametna aplikacija za rezervaciju trening termina
         </h5>
 
-        <p class="text-grey-4" style="max-width: 700px; margin: 0 auto">
+        <p
+          class="text-grey-4"
+          style="
+            max-width: 700px;
+            margin: 0 auto;
+            overflow-wrap: break-word;
+            padding: 0 16px;
+          "
+        >
           Organiziraj svoje treninge bez stresa. Rezerviraj termine, prati
           dostupnost i upravljaj svojim rasporedom u samo par klikova.
         </p>

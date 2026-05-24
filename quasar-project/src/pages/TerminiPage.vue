@@ -5,12 +5,58 @@
     <!-- FORMA ZA ADMINA -->
     <q-card v-if="isAdmin" class="q-mb-lg q-pa-md">
       <div class="text-h6 q-mb-md">Dodaj novi termin</div>
-      <q-input v-model="novi.datum" label="Datum" type="date" outlined dark label-color="grey-4" class="q-mb-sm" />
-      <q-input v-model="novi.vrijeme" label="Vrijeme" type="time" outlined dark label-color="grey-4" class="q-mb-sm" />
-      <q-input v-model="novi.vrsta_treninga" label="Vrsta treninga" outlined dark label-color="grey-4" class="q-mb-sm" />
-      <q-input v-model="novi.opis" label="Opis" outlined dark label-color="grey-4" class="q-mb-sm" />
-      <q-input v-model="novi.trajanje" label="Trajanje (min)" type="number" outlined dark label-color="grey-4" class="q-mb-sm" />
-      <q-input v-model="novi.max_kapacitet" label="Max kapacitet" type="number" outlined dark label-color="grey-4" class="q-mb-md" />
+      <q-input
+        v-model="novi.datum"
+        label="Datum"
+        type="date"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-sm"
+      />
+      <q-input
+        v-model="novi.vrijeme"
+        label="Vrijeme"
+        type="time"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-sm"
+      />
+      <q-input
+        v-model="novi.vrsta_treninga"
+        label="Vrsta treninga"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-sm"
+      />
+      <q-input
+        v-model="novi.opis"
+        label="Opis"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-sm"
+      />
+      <q-input
+        v-model="novi.trajanje"
+        label="Trajanje (min)"
+        type="number"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-sm"
+      />
+      <q-input
+        v-model="novi.max_kapacitet"
+        label="Max kapacitet"
+        type="number"
+        outlined
+        dark
+        label-color="grey-4"
+        class="q-mb-md"
+      />
       <q-btn color="primary" label="Dodaj termin" @click="dodajTermin" />
     </q-card>
 
@@ -27,7 +73,11 @@
 
       <!-- DANI U TJEDNU -->
       <div class="row text-center q-py-xs">
-        <div v-for="dan in daniTjedna" :key="dan" class="col text-caption text-grey-7 text-weight-bold">
+        <div
+          v-for="dan in daniTjedna"
+          :key="dan"
+          class="col text-caption text-grey-7 text-weight-bold"
+        >
           {{ dan }}
         </div>
       </div>
@@ -41,28 +91,45 @@
             v-for="dan in tjedan"
             :key="dan.datum"
             class="col q-pa-xs"
-            style="min-height: 70px; border: 1px solid #e0e0e0;"
+            style="min-height: 70px; border: 1px solid #e0e0e0"
           >
             <!-- Broj dana -->
             <div
               class="text-caption text-right q-mb-xs"
-              :class="dan.danas ? 'text-primary text-weight-bold' : dan.drugiMjesec ? 'text-grey-4' : 'text-grey-8'"
+              :class="
+                dan.danas
+                  ? 'text-primary text-weight-bold'
+                  : dan.drugiMjesec
+                  ? 'text-grey-4'
+                  : 'text-grey-8'
+              "
             >
               {{ dan.broj }}
             </div>
 
             <!-- Termini tog dana -->
-<div v-for="t in dan.termini" :key="t.termin_id">
-  <q-badge
-  :color="dan.datum < danasStr ? 'grey-6' : popunjenosti[t.termin_id] >= t.max_kapacitet ? 'negative' : 'positive'"
-  class="q-mb-xs full-width"
-  :class="dan.datum < danasStr ? '' : 'cursor-pointer'"
-  style="white-space: normal; display: block;"
-  @click="dan.datum >= danasStr && (isAdmin ? otvoriOpcije(t) : $router.push('/app/termini/' + t.termin_id))"
->
-  {{ t.vrijeme.substring(0, 5) }} {{ t.vrsta_treninga }}
-</q-badge>
-</div>
+            <div v-for="t in dan.termini" :key="t.termin_id">
+              <q-badge
+                :color="
+                  dan.datum < danasStr
+                    ? 'grey-6'
+                    : popunjenosti[t.termin_id] >= t.max_kapacitet
+                    ? 'negative'
+                    : 'positive'
+                "
+                class="q-mb-xs full-width"
+                :class="dan.datum < danasStr ? '' : 'cursor-pointer'"
+                style="white-space: normal; display: block"
+                @click="
+                  dan.datum >= danasStr &&
+                    (isAdmin
+                      ? otvoriOpcije(t)
+                      : $router.push('/app/termini/' + t.termin_id))
+                "
+              >
+                {{ t.vrijeme.substring(0, 5) }} {{ t.vrsta_treninga }}
+              </q-badge>
+            </div>
           </div>
         </div>
       </div>
@@ -77,13 +144,25 @@
         <q-card-section class="q-pt-none text-body2">
           Jeste li sigurni da želite obrisati termin
           <strong>{{ odabraniTermin?.vrsta_treninga }}</strong>
-          dana {{ odabraniTermin ? formatDatum(odabraniTermin.datum) : '' }}?
+          dana {{ odabraniTermin ? formatDatum(odabraniTermin.datum) : "" }}?
           <br />
-          <span class="text-negative">Sve rezervacije za ovaj termin bit će također obrisane.</span>
+          <span class="text-negative"
+            >Sve rezervacije za ovaj termin bit će također obrisane.</span
+          >
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Odustani" :disable="brise" @click="zatvoriDijalog" />
-          <q-btn color="negative" label="Obriši" :loading="brise" @click="obrisiTermin" />
+          <q-btn
+            flat
+            label="Odustani"
+            :disable="brise"
+            @click="zatvoriDijalog"
+          />
+          <q-btn
+            color="negative"
+            label="Obriši"
+            :loading="brise"
+            @click="obrisiTermin"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -95,46 +174,131 @@
           <div class="text-h6">Uredi termin</div>
         </q-card-section>
         <q-card-section class="q-pt-none q-gutter-sm">
-          <q-input v-model="uredi.datum" label="Datum" type="date" outlined dark label-color="grey-4" />
-          <q-input v-model="uredi.vrijeme" label="Vrijeme" type="time" outlined dark label-color="grey-4" />
-          <q-input v-model="uredi.vrsta_treninga" label="Vrsta treninga" outlined dark label-color="grey-4"/>
-          <q-input v-model="uredi.opis" label="Opis" outlined dark label-color="grey-4"/>
-          <q-input v-model="uredi.trajanje" label="Trajanje (min)" type="number" outlined dark label-color="grey-4" />
-          <q-input v-model="uredi.max_kapacitet" label="Max kapacitet" type="number" outlined dark label-color="grey-4"/>
+          <q-input
+            v-model="uredi.datum"
+            label="Datum"
+            type="date"
+            outlined
+            dark
+            label-color="grey-4"
+          />
+          <q-input
+            v-model="uredi.vrijeme"
+            label="Vrijeme"
+            type="time"
+            outlined
+            dark
+            label-color="grey-4"
+          />
+          <q-input
+            v-model="uredi.vrsta_treninga"
+            label="Vrsta treninga"
+            outlined
+            dark
+            label-color="grey-4"
+          />
+          <q-input
+            v-model="uredi.opis"
+            label="Opis"
+            outlined
+            dark
+            label-color="grey-4"
+          />
+          <q-input
+            v-model="uredi.trajanje"
+            label="Trajanje (min)"
+            type="number"
+            outlined
+            dark
+            label-color="grey-4"
+          />
+          <q-input
+            v-model="uredi.max_kapacitet"
+            label="Max kapacitet"
+            type="number"
+            outlined
+            dark
+            label-color="grey-4"
+          />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Odustani" v-close-popup />
-          <q-btn color="primary" label="Spremi" :loading="sprema" @click="spremiTermin" />
+          <q-btn
+            color="primary"
+            label="Spremi"
+            :loading="sprema"
+            @click="spremiTermin"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- Dialog opcije za admina -->
-<q-dialog v-model="dijalogOpcije">
-  <q-card style="min-width: 280px">
-    <q-card-section>
-      <div class="text-h6">{{ odabraniTermin?.vrsta_treninga }}</div>
-      <div class="text-caption text-grey">{{ odabraniTermin ? formatDatum(odabraniTermin.datum) : '' }} u {{ odabraniTermin?.vrijeme }}</div>
-    </q-card-section>
-    <q-card-actions vertical align="left">
-      <q-btn flat icon="edit" label="Uredi termin" color="primary" @click="dijalogOpcije = false; otvoriUredi(odabraniTermin)" />
-      <q-btn flat icon="delete" label="Obriši termin" color="negative" @click="dijalogOpcije = false; potvrdiObrisati(odabraniTermin)" />
-      <q-btn flat icon="info" label="Detalji" color="dodatno" @click="dijalogOpcije = false; $router.push('/app/termini/' + odabraniTermin.termin_id)" />
-    </q-card-actions>
-  </q-card>
-</q-dialog>
-
+    <q-dialog v-model="dijalogOpcije">
+      <q-card style="min-width: 280px">
+        <q-card-section>
+          <div class="text-h6">{{ odabraniTermin?.vrsta_treninga }}</div>
+          <div class="text-caption text-grey">
+            {{ odabraniTermin ? formatDatum(odabraniTermin.datum) : "" }} u
+            {{ odabraniTermin?.vrijeme }}
+          </div>
+        </q-card-section>
+        <q-card-actions vertical align="left">
+          <q-btn
+            flat
+            icon="edit"
+            label="Uredi termin"
+            color="primary"
+            @click="
+              dijalogOpcije = false;
+              otvoriUredi(odabraniTermin);
+            "
+          />
+          <q-btn
+            flat
+            icon="delete"
+            label="Obriši termin"
+            color="negative"
+            @click="
+              dijalogOpcije = false;
+              potvrdiObrisati(odabraniTermin);
+            "
+          />
+          <q-btn
+            flat
+            icon="info"
+            label="Detalji"
+            color="dodatno"
+            @click="
+              dijalogOpcije = false;
+              $router.push('/app/termini/' + odabraniTermin.termin_id);
+            "
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { useQuasar } from "quasar";
 
 const MJESECI = [
-  "Siječanj", "Veljača", "Ožujak", "Travanj", "Svibanj", "Lipanj",
-  "Srpanj", "Kolovoz", "Rujan", "Listopad", "Studeni", "Prosinac"
+  "Siječanj",
+  "Veljača",
+  "Ožujak",
+  "Travanj",
+  "Svibanj",
+  "Lipanj",
+  "Srpanj",
+  "Kolovoz",
+  "Rujan",
+  "Listopad",
+  "Studeni",
+  "Prosinac",
 ];
 
 export default {
@@ -151,7 +315,12 @@ export default {
       godina: danas.getFullYear(),
       daniTjedna: ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"],
       novi: {
-        datum: "", vrijeme: "", vrsta_treninga: "", opis: "", trajanje: null, max_kapacitet: null,
+        datum: "",
+        vrijeme: "",
+        vrsta_treninga: "",
+        opis: "",
+        trajanje: null,
+        max_kapacitet: null,
       },
       dijalog: false,
       dijalogUredi: false,
@@ -160,9 +329,10 @@ export default {
       uredi: {},
       brise: false,
       sprema: false,
-      danasStr: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`,
+      danasStr: `${new Date().getFullYear()}-${String(
+        new Date().getMonth() + 1
+      ).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
     };
-    
   },
   computed: {
     isAdmin() {
@@ -192,7 +362,9 @@ export default {
         tjedan = [];
         for (let j = 0; j < 7; j++) {
           const datum = new Date(godina, mjesec, danBroj);
-          const datumStr = `${datum.getFullYear()}-${String(datum.getMonth() + 1).padStart(2, '0')}-${String(datum.getDate()).padStart(2, '0')}`;
+          const datumStr = `${datum.getFullYear()}-${String(
+            datum.getMonth() + 1
+          ).padStart(2, "0")}-${String(datum.getDate()).padStart(2, "0")}`;
           const drugiMjesec = danBroj < 1 || danBroj > zadnjiDan;
           const jeDanas = datum.toDateString() === danas.toDateString();
 
@@ -201,7 +373,9 @@ export default {
             datum: datumStr,
             drugiMjesec,
             danas: jeDanas,
-            termini: drugiMjesec ? [] : this.termini.filter(t => t.datum === datumStr),
+            termini: drugiMjesec
+              ? []
+              : this.termini.filter((t) => t.datum === datumStr),
           });
           danBroj++;
         }
@@ -230,33 +404,35 @@ export default {
       }
     },
     async fetchTermini() {
-  try {
-    const res = await axios.get("http://localhost:3000/termini");
-    this.termini = res.data;
+      try {
+        const res = await axios.get(`${API}/termini`);
+        this.termini = res.data;
 
-    const popunjenosti = {};
-    await Promise.all(
-      res.data.map(async (t) => {
-        const pop = await axios.get(`http://localhost:3000/termini/${t.termin_id}/popunjenost`);
-        popunjenosti[t.termin_id] = pop.data.broj;
-      })
-    );
-    this.popunjenosti = { ...popunjenosti };
-    this.termini = [...this.termini];
-  } catch (err) {
-    console.log("Greška pri dohvaćanju termina", err);
-  }
-},
+        const popunjenosti = {};
+        await Promise.all(
+          res.data.map(async (t) => {
+            const pop = await axios.get(
+              `${API}/termini/${t.termin_id}/popunjenost`
+            );
+            popunjenosti[t.termin_id] = pop.data.broj;
+          })
+        );
+        this.popunjenosti = { ...popunjenosti };
+        this.termini = [...this.termini];
+      } catch (err) {
+        console.log("Greška pri dohvaćanju termina", err);
+      }
+    },
     zatvoriDijalog() {
       if (this.brise) return;
       this.dijalog = false;
       this.odabraniTermin = null;
     },
-    
+
     otvoriOpcije(termin) {
-  this.odabraniTermin = { ...termin };
-  this.dijalogOpcije = true;
-},
+      this.odabraniTermin = { ...termin };
+      this.dijalogOpcije = true;
+    },
 
     potvrdiObrisati(termin) {
       this.odabraniTermin = { ...termin };
@@ -266,20 +442,24 @@ export default {
       if (!this.odabraniTermin) return;
       const id = this.odabraniTermin.termin_id ?? this.odabraniTermin.id;
       if (!id) {
-        this.$q.notify({ type: "negative", message: "Greška: ID termina nije pronađen." });
+        this.$q.notify({
+          type: "negative",
+          message: "Greška: ID termina nije pronađen.",
+        });
         return;
       }
       this.brise = true;
       try {
-        await axios.delete(`http://localhost:3000/termini/${id}`);
+        await axios.delete(`${API}/termini/${id}`);
         this.$q.notify({ type: "positive", message: "Termin obrisan." });
-        this.termini = this.termini.filter(t => (t.termin_id ?? t.id) !== id);
+        this.termini = this.termini.filter((t) => (t.termin_id ?? t.id) !== id);
         this.dijalog = false;
         this.odabraniTermin = null;
       } catch (err) {
         this.$q.notify({
           type: "negative",
-          message: err.response?.data?.message || `Greška ${err.response?.status}`
+          message:
+            err.response?.data?.message || `Greška ${err.response?.status}`,
         });
       } finally {
         this.brise = false;
@@ -300,12 +480,15 @@ export default {
     async spremiTermin() {
       this.sprema = true;
       try {
-        await axios.put(`http://localhost:3000/termini/${this.uredi.termin_id}`, this.uredi);
+        await axios.put(`${API}/termini/${this.uredi.termin_id}`, this.uredi);
         this.$q.notify({ type: "positive", message: "Termin ažuriran." });
         this.dijalogUredi = false;
         await this.fetchTermini();
       } catch (err) {
-        this.$q.notify({ type: "negative", message: "Greška pri ažuriranju termina" });
+        this.$q.notify({
+          type: "negative",
+          message: "Greška pri ažuriranju termina",
+        });
       } finally {
         this.sprema = false;
       }
@@ -314,33 +497,49 @@ export default {
       const auth = useAuth();
       const korisnik_id = auth.state.user?.korisnik_id;
       try {
-        await axios.post("http://localhost:3000/rezervacije", {
+        await axios.post(`${API}/rezervacije`, {
           korisnik_id,
           termin_id: t.termin_id,
         });
         this.$q.notify({ type: "positive", message: "Rezervacija uspješna!" });
       } catch (err) {
-        this.$q.notify({ type: "negative", message: err.response?.data?.message || "Greška" });
+        this.$q.notify({
+          type: "negative",
+          message: err.response?.data?.message || "Greška",
+        });
       }
     },
     async dodajTermin() {
       const danas = new Date().toISOString().split("T")[0];
-  if (this.novi.datum < danas) {
-    this.$q.notify({ type: "negative", message: "Ne možete dodati termin s prošlim datumom." });
-    return;
-  }
+      if (this.novi.datum < danas) {
+        this.$q.notify({
+          type: "negative",
+          message: "Ne možete dodati termin s prošlim datumom.",
+        });
+        return;
+      }
       const auth = useAuth();
       const korisnik_id = auth.state.user?.korisnik_id;
       try {
-        await axios.post("http://localhost:3000/termini", {
+        await axios.post(`${API}/termini`, {
           ...this.novi,
           korisnik_id,
         });
         this.$q.notify({ type: "positive", message: "Termin dodan!" });
-        this.novi = { datum: "", vrijeme: "", vrsta_treninga: "", opis: "", trajanje: null, max_kapacitet: null };
+        this.novi = {
+          datum: "",
+          vrijeme: "",
+          vrsta_treninga: "",
+          opis: "",
+          trajanje: null,
+          max_kapacitet: null,
+        };
         await this.fetchTermini();
       } catch (err) {
-        this.$q.notify({ type: "negative", message: "Greška pri dodavanju termina" });
+        this.$q.notify({
+          type: "negative",
+          message: "Greška pri dodavanju termina",
+        });
       }
     },
   },

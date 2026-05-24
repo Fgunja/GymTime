@@ -23,7 +23,7 @@
             <q-icon name="fitness_center" size="28px" />
             <div>
               <div class="text-h6">
-                {{ rezervacija.TerminGT?.vrsta_treninga }}
+                {{ rezervacija.vrsta_treninga }}
               </div>
             </div>
             <q-space />
@@ -48,7 +48,7 @@
                   size="16px"
                   class="q-mr-xs text-primary"
                 />
-                {{ formatDatum(rezervacija.TerminGT?.datum) }}
+                {{ formatDatum(rezervacija.datum) }}
               </div>
             </div>
             <div class="col-12 col-sm-6">
@@ -59,14 +59,14 @@
                   size="16px"
                   class="q-mr-xs text-primary"
                 />
-                {{ rezervacija.TerminGT?.vrijeme }}
+                {{ rezervacija.vrijeme }}
               </div>
             </div>
             <div class="col-12 col-sm-6">
               <div class="text-caption text-grey">Trajanje</div>
               <div class="text-body1 text-weight-medium">
                 <q-icon name="timer" size="16px" class="q-mr-xs text-primary" />
-                {{ rezervacija.TerminGT?.trajanje }} minuta
+                {{ rezervacija.trajanje }} minuta
               </div>
             </div>
             <div class="col-12 col-sm-6">
@@ -143,8 +143,8 @@
         </q-card-section>
         <q-card-section class="q-pt-none text-body2">
           Jeste li sigurni da želite otkazati rezervaciju za
-          <strong>{{ rezervacija?.TerminGT?.vrsta_treninga }}</strong>
-          dana {{ formatDatum(rezervacija?.TerminGT?.datum) }}?
+          <strong>{{ rezervacija?.vrsta_treninga }}</strong>
+          dana {{ formatDatum(rezervacija?.datum) }}?
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Odustani" v-close-popup />
@@ -156,6 +156,7 @@
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { Notify } from "quasar";
@@ -177,19 +178,17 @@ export default {
     const korisnik_id = auth.state.user?.korisnik_id;
 
     try {
-      const res = await axios.get(
-        `http://localhost:3000/rezervacije/${korisnik_id}`
-      );
+      const res = await axios.get(`${API}/rezervacije/${korisnik_id}`);
       this.rezervacija = res.data.find((r) => r.rezervacija_id == id) || null;
 
       if (this.rezervacija) {
         try {
           const terminRes = await axios.get(
-            `http://localhost:3000/termini/${this.rezervacija.termin_id}`
+            `${API}/termini/${this.rezervacija.termin_id}`
           );
           this.termin = terminRes.data;
           const pop = await axios.get(
-            `http://localhost:3000/termini/${this.rezervacija.termin_id}/popunjenost`
+            `${API}/termini/${this.rezervacija.termin_id}/popunjenost`
           );
           this.popunjenost = pop.data.broj;
         } catch {}
@@ -216,7 +215,7 @@ export default {
     async otkazi() {
       try {
         await axios.delete(
-          `http://localhost:3000/rezervacije/${this.rezervacija.rezervacija_id}`
+          `${API}/rezervacije/${this.rezervacija.rezervacija_id}`
         );
         Notify.create({ type: "positive", message: "Rezervacija otkazana." });
         this.rezervacija.status_rezervacije = "otkazana";

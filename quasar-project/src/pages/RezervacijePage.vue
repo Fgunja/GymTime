@@ -34,11 +34,11 @@
             <q-icon name="fitness_center" color="primary" size="24px" />
             <div>
               <div class="text-white text-weight-medium">
-                {{ r.TerminGT?.vrsta_treninga }}
+                {{ r.vrsta_treninga }}
               </div>
               <div class="text-grey-5 text-caption">
-                {{ r.TerminGT?.datum?.substring(0, 10) }} u
-                {{ r.TerminGT?.vrijeme }} · {{ r.TerminGT?.trajanje }} min
+                {{ r.datum?.substring(0, 10) }} u {{ r.vrijeme }} ·
+                {{ r.trajanje }} min
               </div>
             </div>
           </div>
@@ -73,10 +73,8 @@
         </q-card-section>
         <q-card-section class="q-pt-none text-grey-4">
           Jeste li sigurni da želite otkazati rezervaciju za
-          <strong class="text-white">{{
-            odabrana?.TerminGT?.vrsta_treninga
-          }}</strong>
-          dana {{ odabrana?.TerminGT?.datum?.substring(0, 10) }}?
+          <strong class="text-white">{{ odabrana?.vrsta_treninga }}</strong>
+          dana {{ odabrana?.datum?.substring(0, 10) }}?
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Odustani" color="grey" v-close-popup />
@@ -93,6 +91,7 @@
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { Notify } from "quasar";
@@ -111,9 +110,7 @@ export default {
     const auth = useAuth();
     const korisnik_id = auth.state.user?.korisnik_id;
     try {
-      const res = await axios.get(
-        `http://localhost:3000/rezervacije/${korisnik_id}`
-      );
+      const res = await axios.get(`${API}/rezervacije/${korisnik_id}`);
       this.rezervacije = res.data;
     } catch (err) {
       console.log("Greška pri dohvaćanju rezervacija", err);
@@ -130,7 +127,7 @@ export default {
       this.otkazuje = true;
       try {
         await axios.delete(
-          `http://localhost:3000/rezervacije/${this.odabrana.rezervacija_id}`
+          `${API}/rezervacije/${this.odabrana.rezervacija_id}`
         );
         this.odabrana.status_rezervacije = "otkazana";
         Notify.create({ type: "positive", message: "Rezervacija otkazana." });

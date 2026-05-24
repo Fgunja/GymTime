@@ -221,6 +221,7 @@
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 
@@ -292,15 +293,13 @@ export default {
     async fetchKorisnici() {
       this.loading = true;
       try {
-        const res = await axios.get("http://localhost:3000/korisnici");
+        const res = await axios.get(`${API}/korisnici`);
         const korisnici = res.data;
         // Dohvati aktivnu pretplatu za svakog korisnika
         await Promise.all(
           korisnici.map(async (k) => {
             try {
-              const p = await axios.get(
-                `http://localhost:3000/pretplata/${k.korisnik_id}`
-              );
+              const p = await axios.get(`${API}/pretplata/${k.korisnik_id}`);
               k._pretplata = p.data.aktivna ? p.data.pretplata : null;
             } catch {
               k._pretplata = null;
@@ -327,7 +326,7 @@ export default {
 
       try {
         const res = await axios.get(
-          `http://localhost:3000/admin/pretplata/${korisnik.korisnik_id}`
+          `${API}/admin/pretplata/${korisnik.korisnik_id}`
         );
         this.pretplate = res.data;
       } catch {
@@ -341,7 +340,7 @@ export default {
 
       try {
         const res = await axios.get(
-          `http://localhost:3000/rezervacije/${korisnik.korisnik_id}`
+          `${API}/rezervacije/${korisnik.korisnik_id}`
         );
         this.rezervacije = res.data;
       } catch {
@@ -355,12 +354,9 @@ export default {
     },
     async promijeniStatus(pretplata, noviStatus) {
       try {
-        await axios.put(
-          `http://localhost:3000/admin/pretplata/${pretplata.pretplata_id}`,
-          {
-            status_pretplate: noviStatus,
-          }
-        );
+        await axios.put(`${API}/admin/pretplata/${pretplata.pretplata_id}`, {
+          status_pretplate: noviStatus,
+        });
         pretplata.status_pretplate = noviStatus;
         // Ažuriraj i prikaz u tablici
         const k = this.korisnici.find(

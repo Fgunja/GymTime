@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import API from "src/api";
 import axios from "axios";
 import { useAuth } from "src/auth";
 import { Notify } from "quasar";
@@ -52,7 +53,7 @@ export default {
     async login() {
       const auth = useAuth();
       try {
-        const res = await axios.post("http://localhost:3000/login", {
+        const res = await axios.post(`${API}/login`, {
           username: this.username,
           lozinka: this.lozinka,
         });

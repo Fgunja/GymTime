@@ -6,7 +6,12 @@
     <q-card bordered class="q-mb-md">
       <q-card-section>
         <div class="row items-center q-gutter-md">
-          <q-avatar size="72px" color="primary" text-color="white" class="text-h4">
+          <q-avatar
+            size="72px"
+            color="primary"
+            text-color="white"
+            class="text-h4"
+          >
             {{ inicijali }}
           </q-avatar>
           <div>
@@ -83,31 +88,48 @@
           </q-banner>
           <q-list dense>
             <q-item>
-              <q-item-section avatar><q-icon name="sell" color="grey" /></q-item-section>
+              <q-item-section avatar
+                ><q-icon name="sell" color="grey"
+              /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Naziv paketa</q-item-label>
-                <q-item-label>{{ pretplata.pretplata.CjenikGT?.naziv_paketa || pretplata.pretplata.naziv_pretplate }}</q-item-label>
+                <q-item-label>{{
+                  pretplata.pretplata.CjenikGT?.naziv_paketa ||
+                  pretplata.pretplata.naziv_pretplate
+                }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
-              <q-item-section avatar><q-icon name="euro" color="grey" /></q-item-section>
+              <q-item-section avatar
+                ><q-icon name="euro" color="grey"
+              /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Cijena</q-item-label>
-                <q-item-label>{{ pretplata.pretplata.CjenikGT?.cijena }} €</q-item-label>
+                <q-item-label
+                  >{{ pretplata.pretplata.CjenikGT?.cijena }} €</q-item-label
+                >
               </q-item-section>
             </q-item>
             <q-item>
-              <q-item-section avatar><q-icon name="calendar_today" color="grey" /></q-item-section>
+              <q-item-section avatar
+                ><q-icon name="calendar_today" color="grey"
+              /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Vrijedi od</q-item-label>
-                <q-item-label>{{ formatDatum(pretplata.pretplata.datum_pocetka) }}</q-item-label>
+                <q-item-label>{{
+                  formatDatum(pretplata.pretplata.datum_pocetka)
+                }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
-              <q-item-section avatar><q-icon name="event_busy" color="grey" /></q-item-section>
+              <q-item-section avatar
+                ><q-icon name="event_busy" color="grey"
+              /></q-item-section>
               <q-item-section>
                 <q-item-label caption>Ističe</q-item-label>
-                <q-item-label>{{ formatDatum(pretplata.pretplata.datum_isteka) }}</q-item-label>
+                <q-item-label>{{
+                  formatDatum(pretplata.pretplata.datum_isteka)
+                }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -118,7 +140,8 @@
             <template v-slot:avatar>
               <q-icon name="warning" color="orange" />
             </template>
-            Nemate aktivnu pretplatu. Bez pretplate ne možete rezervirati termine.
+            Nemate aktivnu pretplatu. Bez pretplate ne možete rezervirati
+            termine.
           </q-banner>
           <q-btn
             color="primary"
@@ -154,7 +177,9 @@
           <div class="col-4">
             <q-card flat bordered>
               <q-card-section class="q-pa-sm">
-                <div class="text-h5 text-positive">{{ aktivneRezervacije }}</div>
+                <div class="text-h5 text-positive">
+                  {{ aktivneRezervacije }}
+                </div>
                 <div class="text-caption text-grey">Aktivne</div>
               </q-card-section>
             </q-card>
@@ -162,7 +187,9 @@
           <div class="col-4">
             <q-card flat bordered>
               <q-card-section class="q-pa-sm">
-                <div class="text-h5 text-negative">{{ otkazaneRezervacije }}</div>
+                <div class="text-h5 text-negative">
+                  {{ otkazaneRezervacije }}
+                </div>
                 <div class="text-caption text-grey">Otkazane</div>
               </q-card-section>
             </q-card>
@@ -192,12 +219,13 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { useAuth } from 'src/auth';
-import { useRouter } from 'vue-router';
+import API from "src/api";
+import axios from "axios";
+import { useAuth } from "src/auth";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'ProfilPage',
+  name: "ProfilPage",
   setup() {
     const auth = useAuth();
     const router = useRouter();
@@ -216,18 +244,20 @@ export default {
       return this.auth.state.user || {};
     },
     inicijali() {
-      const ime = this.user.ime?.[0] || '';
-      const prezime = this.user.prezime?.[0] || '';
-      return (ime + prezime).toUpperCase() || '?';
+      const ime = this.user.ime?.[0] || "";
+      const prezime = this.user.prezime?.[0] || "";
+      return (ime + prezime).toUpperCase() || "?";
     },
     ukupnoRezervacija() {
       return this.rezervacije.length;
     },
     aktivneRezervacije() {
-      return this.rezervacije.filter(r => r.status_rezervacije === 'aktivna').length;
+      return this.rezervacije.filter((r) => r.status_rezervacije === "aktivna")
+        .length;
     },
     otkazaneRezervacije() {
-      return this.rezervacije.filter(r => r.status_rezervacije === 'otkazana').length;
+      return this.rezervacije.filter((r) => r.status_rezervacije === "otkazana")
+        .length;
     },
   },
   async mounted() {
@@ -235,32 +265,32 @@ export default {
 
     // Dohvati pretplatu
     try {
-      const res = await axios.get(`http://localhost:3000/pretplata/${korisnik_id}`);
+      const res = await axios.get(`${API}/pretplata/${korisnik_id}`);
       this.pretplata = res.data;
     } catch (err) {
-      console.log('Greška pri dohvaćanju pretplate', err);
+      console.log("Greška pri dohvaćanju pretplate", err);
     } finally {
       this.loadingPretplata = false;
     }
 
     // Dohvati rezervacije za statistiku
     try {
-      const res = await axios.get(`http://localhost:3000/rezervacije/${korisnik_id}`);
+      const res = await axios.get(`${API}/rezervacije/${korisnik_id}`);
       this.rezervacije = res.data;
     } catch (err) {
-      console.log('Greška pri dohvaćanju rezervacija', err);
+      console.log("Greška pri dohvaćanju rezervacija", err);
     } finally {
       this.loadingRezervacije = false;
     }
   },
   methods: {
     formatDatum(datum) {
-      if (!datum) return '–';
+      if (!datum) return "–";
       return datum.substring(0, 10);
     },
     odjava() {
       this.auth.logout();
-      this.router.push('/');
+      this.router.push("/");
     },
   },
 };

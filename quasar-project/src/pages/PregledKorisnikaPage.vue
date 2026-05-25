@@ -50,7 +50,7 @@
                   : 'warning'
               "
             >
-              {{ props.row._pretplata.CjenikGT?.naziv_paketa }} —
+              {{ props.row._pretplata.naziv_paketa }} —
               {{ props.row._pretplata.status_pretplate }}
             </q-badge>
             <span v-else class="text-grey-5 text-caption">nema pretplate</span>
@@ -109,7 +109,8 @@
                 <q-icon
                   name="calendar_today"
                   class="q-mr-xs text-grey"
-                />Registriran: {{ odabraniKorisnik?.datum_registracije }}
+                />Registriran:
+                {{ odabraniKorisnik?.datum_registracije?.substring(0, 10) }}
               </div>
             </div>
           </q-card-section>
@@ -132,11 +133,12 @@
               <q-item v-for="p in pretplate" :key="p.pretplata_id">
                 <q-item-section>
                   <q-item-label class="text-weight-medium">{{
-                    p.CjenikGT?.naziv_paketa
+                    p.naziv_paketa
                   }}</q-item-label>
                   <q-item-label caption
-                    >{{ p.datum_pocetka }} → {{ p.datum_isteka }} ·
-                    {{ p.CjenikGT?.cijena }} €</q-item-label
+                    >{{ p.datum_pocetka?.substring(0, 10) }} →
+                    {{ p.datum_isteka?.substring(0, 10) }} ·
+                    {{ p.cijena }} €</q-item-label
                   >
                 </q-item-section>
                 <q-item-section side>
@@ -147,7 +149,13 @@
                     rounded
                   >
                     <q-menu>
-                      <q-list style="min-width: 140px">
+                      <q-list
+                        style="
+                          min-width: 140px;
+                          background: #1e1e1e;
+                          color: white;
+                        "
+                      >
                         <q-item-label header>Promijeni status</q-item-label>
                         <q-item
                           v-for="s in statusi"
@@ -189,17 +197,16 @@
                   <q-icon name="fitness_center" color="primary" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ r.TerminGT?.vrsta_treninga }}</q-item-label>
+                  <q-item-label>{{ r.vrsta_treninga }}</q-item-label>
                   <q-item-label caption
-                    >{{ r.TerminGT?.datum?.substring(0, 10) }} u
-                    {{ r.TerminGT?.vrijeme }} ·
-                    {{ r.TerminGT?.trajanje }} min</q-item-label
+                    >{{ r.datum?.substring(0, 10) }} u {{ r.vrijeme }} ·
+                    {{ r.trajanje }} min</q-item-label
                   >
                 </q-item-section>
                 <q-item-section side>
                   <q-badge
                     :color="
-                      r.status_rezervacije === 'aktivna'
+                      r.status_rezervacije === 'potvrđena'
                         ? 'positive'
                         : 'negative'
                     "

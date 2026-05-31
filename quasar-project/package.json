@@ -13,6 +13,7 @@
     "build": "quasar build"
   },
   "dependencies": {
+    "@capacitor/browser": "^8.0.3",
     "@quasar/extras": "^1.16.4",
     "axios": "^1.2.1",
     "quasar": "^2.16.0",

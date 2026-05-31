@@ -2,24 +2,28 @@
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-dark text-white">
       <q-toolbar>
-  <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
-  <q-toolbar-title
-    class="cursor-pointer text-weight-bold"
-    @click="$router.push('/app')"
-  >
-    GymTime
-  </q-toolbar-title>
+        <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
+        <q-toolbar-title
+          class="cursor-pointer text-weight-bold"
+          @click="$router.push('/app')"
+        >
+          GymTime
+        </q-toolbar-title>
 
-  <div class="row items-center q-gutter-sm">
-     {{ auth.state.user?.username }}
-    <q-btn flat icon="logout" @click="logout" />
-  </div>
-</q-toolbar>
+        <div class="row items-center q-gutter-sm">
+          {{ auth.state.user?.username }}
+          <q-btn flat icon="logout" @click="logout" />
+        </div>
+      </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" show-if-above bordered class="bg-dark text-white">
+    <q-drawer
+      v-model="drawer"
+      show-if-above
+      bordered
+      class="bg-dark text-white"
+    >
       <q-list>
-        <!-- KORISNIČKE STRANICE -->
         <q-item-label header class="text-grey-7">Izbornik</q-item-label>
 
         <q-item to="/app" exact clickable v-ripple>
@@ -34,7 +38,12 @@
           <q-item-section>Termini</q-item-section>
         </q-item>
 
-        <q-item v-if="auth.state.user?.uloga !== 'admin'" to="/app/rezervacije" clickable v-ripple>
+        <q-item
+          v-if="auth.state.user?.uloga !== 'admin'"
+          to="/app/rezervacije"
+          clickable
+          v-ripple
+        >
           <q-item-section avatar><q-icon name="event" /></q-item-section>
           <q-item-section>Rezervacije</q-item-section>
         </q-item>
@@ -52,11 +61,13 @@
         </q-item>
 
         <q-item to="/app/profil" clickable v-ripple>
-          <q-item-section avatar><q-icon name="account_circle" /></q-item-section>
+          <q-item-section avatar
+            ><q-icon name="account_circle"
+          /></q-item-section>
           <q-item-section>Profil</q-item-section>
         </q-item>
 
-        <!-- ADMIN SEKCIJA - samo za admina -->
+        <!-- ADMIN SEKCIJA -->
         <template v-if="auth.state.user?.uloga === 'admin'">
           <q-separator class="q-my-sm" />
           <q-item-label header class="text-grey-7">Admin</q-item-label>
@@ -66,6 +77,15 @@
             <q-item-section>Pregled korisnika</q-item-section>
           </q-item>
         </template>
+
+        <!-- UPUTE - uvijek vidljivo -->
+        <q-separator class="q-my-sm" />
+        <q-item clickable v-ripple @click="otvoriUpute">
+          <q-item-section avatar
+            ><q-icon name="help" color="primary"
+          /></q-item-section>
+          <q-item-section>Upute</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -76,6 +96,7 @@
 </template>
 
 <script>
+import { Browser } from "@capacitor/browser";
 import { useAuth } from "src/auth";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
@@ -91,7 +112,20 @@ export default {
       router.push("/");
     };
 
-    return { auth, logout, drawer };
+    const otvoriUpute = async () => {
+      try {
+        await Browser.open({
+          url: "https://gymtime-production.up.railway.app/upute.pdf",
+        });
+      } catch (e) {
+        window.open(
+          "https://gymtime-production.up.railway.app/upute.pdf",
+          "_blank"
+        );
+      }
+    };
+
+    return { auth, logout, drawer, otvoriUpute };
   },
 };
 </script>
@@ -101,7 +135,7 @@ export default {
   color: white;
 }
 .q-drawer .q-item--active {
-  color: #FF6B00;
+  color: #ff6b00;
 }
 .q-item-label--header {
   color: #888 !important;

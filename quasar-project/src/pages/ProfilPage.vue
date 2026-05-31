@@ -106,7 +106,7 @@
               <q-item-section>
                 <q-item-label caption>Cijena</q-item-label>
                 <q-item-label
-                  >{{ pretplata.pretplata.CjenikGT?.cijena }} €</q-item-label
+                  >{{ pretplata.pretplata.CjenikGT?.cijena || pretplata.pretplata.cijena }} €</q-item-label
                 >
               </q-item-section>
             </q-item>

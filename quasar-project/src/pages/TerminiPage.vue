@@ -94,21 +94,21 @@
             style="min-height: 70px; border: 1px solid #e0e0e0"
           >
             <!-- Broj dana -->
-            <div
-              class="text-caption text-right q-mb-xs"
-              :class="
-                dan.danas
-                  ? 'text-primary text-weight-bold'
-                  : dan.drugiMjesec
-                  ? 'text-grey-4'
-                  : 'text-grey-8'
-              "
-            >
-              {{ dan.broj }}
-            </div>
+<div
+  v-if="!dan.drugiMjesec"
+  class="text-caption text-right q-mb-xs"
+  :class="
+    dan.danas
+      ? 'text-primary text-weight-bold'
+      : 'text-grey-8'
+  "
+>
+  {{ dan.broj }}
+</div>
 
             <!-- Termini tog dana -->
-            <div v-for="t in dan.termini" :key="t.termin_id">
+            <template v-if="!dan.drugiMjesec">
+  <div v-for="t in dan.termini" :key="t.termin_id">
               <q-badge
                 :color="
                   dan.datum < danasStr
@@ -130,6 +130,7 @@
                 {{ t.vrijeme.substring(0, 5) }} {{ t.vrsta_treninga }}
               </q-badge>
             </div>
+          </template>
           </div>
         </div>
       </div>
@@ -383,7 +384,7 @@ export default {
         if (danBroj > zadnjiDan + 1) break;
       }
 
-      return mreza;
+      return mreza.filter(tjedan => tjedan.some(dan => !dan.drugiMjesec));
     },
   },
   async mounted() {

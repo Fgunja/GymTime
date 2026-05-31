@@ -55,7 +55,7 @@
     <!-- IMAGE SECTION -->
     <div class="q-pa-md flex flex-center">
       <q-img
-        src="https://thefitness-shop.com.au/wp-content/uploads/2022/07/NRG-Gym-Essendon-1.jpg"
+        src="~assets/gym.jpg"
         style="max-width: 900px; width: 100%; border-radius: 20px"
         class="shadow-10"
       />

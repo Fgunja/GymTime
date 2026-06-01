@@ -106,7 +106,11 @@
               <q-item-section>
                 <q-item-label caption>Cijena</q-item-label>
                 <q-item-label
-                  >{{ pretplata.pretplata.CjenikGT?.cijena || pretplata.pretplata.cijena }} €</q-item-label
+                  >{{
+                    pretplata.pretplata.CjenikGT?.cijena ||
+                    pretplata.pretplata.cijena
+                  }}
+                  €</q-item-label
                 >
               </q-item-section>
             </q-item>
@@ -252,8 +256,9 @@ export default {
       return this.rezervacije.length;
     },
     aktivneRezervacije() {
-      return this.rezervacije.filter((r) => r.status_rezervacije === "aktivna")
-        .length;
+      return this.rezervacije.filter(
+        (r) => r.status_rezervacije === "potvrđena"
+      ).length;
     },
     otkazaneRezervacije() {
       return this.rezervacije.filter((r) => r.status_rezervacije === "otkazana")
